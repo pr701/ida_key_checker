@@ -137,7 +137,7 @@ int check_signature(path bin_file, path decrypted_file = "")
 	}
 	
 	file.seekg(0, ios::end);
-	size_t size = file.tellg();
+	streampos size = file.tellg();
 	file.seekg(0, ios::beg);
 
 	if (size)
