@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header files\bigint">
+      <UniqueIdentifier>{fb5ed3eb-4952-4a77-90cd-f10ca321fdc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\md5">
+      <UniqueIdentifier>{45536b42-56c7-4f78-a45d-2161737bfae4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header files\base64">
+      <UniqueIdentifier>{f5724c08-eea3-4e78-bb95-bc5c42f5b3ed}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ida_key_checker.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bigint.c">
+      <Filter>Header files\bigint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\md5.c">
+      <Filter>Header files\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ida_license.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\base64.cpp">
+      <Filter>Header files\base64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ida_key.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ida_cnv_utils.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\bigint.h">
+      <Filter>Header files\bigint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bigint_impl.h">
+      <Filter>Header files\bigint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\md5.h">
+      <Filter>Header files\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ida_license.hpp">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\md5.hpp">
+      <Filter>Header files\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bigint.hpp">
+      <Filter>Header files\bigint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\base64.h">
+      <Filter>Header files\base64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ida_key.hpp">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ida_cnv_utils.hpp">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ida_rsa_patches.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
