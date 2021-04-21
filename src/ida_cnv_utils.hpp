@@ -27,6 +27,19 @@ namespace ida
 	string get_time(time_t time, bool extended = false);
 	string get_username(const char* username);
 	string get_hex(const uint8_t* data, size_t size);
+	string get_hex(const string& value);
+
+	template<typename T>
+	string get_hex(const T& value)
+	{
+		std::stringstream str;
+		str << std::hex << setfill('0') << std::setw(sizeof(T) * 2);
+		if (sizeof(T) == 1)
+			str << static_cast<uint16_t>(value);
+		else
+			str << value;
+		return str.str();
+	}
 
 	time_t get_time(const string& value, bool extended = false);
 }

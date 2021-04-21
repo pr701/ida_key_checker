@@ -70,6 +70,12 @@ Save decrypted signature to: "sign.decrypted"
 Decrypted signature saved
 ```
 
+Save signature from `.idb`
+
+```bash
+ida_key_checker -i "advapi32.dll.idb" -t idb -o originaluser
+```
+
 ## Libs
 
 [bigint](https://sourceforge.net/projects/axtls/)
@@ -78,3 +84,4 @@ Decrypted signature saved
 
 [cpp-base64](https://github.com/ReneNyffenegger/cpp-base64)
 
+[idb3](https://github.com/nlitsme/idbutil)

@@ -110,6 +110,11 @@ namespace ida
 		return result;
 	}
 
+	string get_hex(const string& value)
+	{
+		return get_hex(reinterpret_cast<const uint8_t*>(value.data()), value.size());
+	}
+
 	time_t get_time(const string& value, bool extended)
 	{
 		bool isTime = false;
