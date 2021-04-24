@@ -1,5 +1,7 @@
 /*
-* IDA Pro reverse-engineered license data and rsa const
+* IDA Pro reverse-engineered license data and rsa const header
+* 
+* RnD, 2021
 */
 
 #ifdef _MSC_VER
@@ -52,6 +54,7 @@ namespace ida
 		uint8_t versionFlag;
 		uint8_t reserved3[7];
 		md5_t md5;
+		// uint8_t pad[32]; // 0x0
 	} license_t;
 	#pragma pack(pop)
 

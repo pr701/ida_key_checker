@@ -1,5 +1,7 @@
 /*
-* some conversion utils
+* Some conversion utils header
+*
+* RnD, 2021
 */
 
 #ifdef _MSC_VER
@@ -20,7 +22,7 @@ using namespace std;
 
 namespace ida
 {
-	void print_license(const license_t& license);
+	void print_license(const license_t& license, bool skip_ver = false);
 
 	string get_license_type(uint16_t type);
 	string get_license_id(const id_t& id);

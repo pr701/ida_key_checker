@@ -1,5 +1,7 @@
 /*
 * IDA key checker/dumper
+* 
+* RnD, 2021
 */
 
 #include <cstdint>
@@ -16,19 +18,43 @@
 #include <tchar.h>
 #endif
 
+#include <idb3.hpp>
+#include <cxxopts.hpp>
+
+#include "ida_key.hpp"
+#include "ida_rsa_patches.h"
+
 #if defined(WIN32) && defined(UNICODE)
 #define file_path(x)	get_file_path(x)	
 #else
 #define file_path(x)	x
 #endif
 
-#include "ida_key.hpp"
-#include "ida_rsa_patches.h"
-
-#include <idb3.hpp>
-#include <cxxopts.hpp>
-
 using namespace ida;
+
+// Helpers
+enum EFileType
+{
+	EFileType_Unknown = -1,
+	EFileType_KEY = 0,
+	EFileType_IDB,
+	EFileType_BIN
+};
+
+#if defined(WIN32) && defined(UNICODE)
+path get_file_path(const string& filepath)
+{
+	wstring unicode;
+	int count = MultiByteToWideChar(CP_UTF8, 0, filepath.c_str(), filepath.length(), nullptr, 0);
+	if (count)
+	{
+		unicode.resize(count + 1);
+		count = MultiByteToWideChar(CP_UTF8, 0, filepath.c_str(), filepath.length(), unicode.data(), count);
+		if (count) unicode.resize(count);
+	}
+	return path(unicode);
+}
+#endif
 
 bool write_file(const path& path, const void* data, size_t size)
 {
@@ -69,12 +95,6 @@ bool decrypt_sign(const signature_t& sign, license_t& license, bool& is_pirated)
 // Check key file
 int check_key_file(path ida_key_file, path signature_file = "")
 {
-	if (!exists(ida_key_file))
-	{
-		cout << "File not found: " << ida_key_file << endl;
-		return 2;
-	}
-
 	cout << endl << "Key file: " << ida_key_file << endl;
 
 	key_t key;
@@ -133,68 +153,10 @@ int check_key_file(path ida_key_file, path signature_file = "")
 	return 0;
 }
 
-// Check binary signature
-int check_signature(path bin_file, path decrypted_file = "")
-{
-	license_t license;
-	signature_t signature;
-	memset(&signature, 0, sizeof(signature_t));
-
-	ifstream file(bin_file, ios::binary);
-	if (!file.is_open())
-	{
-		cout << "Access error to file: " << bin_file << endl;
-		return 2;
-	}
-
-	file.seekg(0, ios::end);
-	streampos size = file.tellg();
-	file.seekg(0, ios::beg);
-
-	if (size)
-	{
-		file.read(reinterpret_cast<char*>(&signature),
-			size < sizeof(signature_t) ? size : sizeof(signature_t));
-	}
-	file.close();
-
-	bool is_sign_decrypted = false;
-	bool is_pirated = true;
-
-	is_sign_decrypted = decrypt_sign(signature, license, is_pirated);
-
-	cout << endl << "Signature block: " << bin_file << endl;
-
-	if (!is_sign_decrypted)
-	{
-		cout << "Incorrect block or unknown key" << endl;
-		return 2;
-	}
-
-	cout << "Is Pirated:" << '\t' << is_pirated << endl;
-	print_license(license);
-
-	if (!decrypted_file.empty())
-	{
-		cout << endl << "Save decrypted signature to: " << decrypted_file << endl;
-		if (!write_file(decrypted_file, reinterpret_cast<uint8_t*>(&license), sizeof(license_t)))
-			cout << "Error: access fail" << endl;
-		else
-			cout << "Decrypted signature saved" << endl;
-	}
-	return 0;
-}
-
 int check_idb_user(path idb_database, path signature_file = "")
 {
 	try
 	{
-		if (!exists(idb_database))
-		{
-			cout << "File not found: " << idb_database << endl;
-			return 2;
-		}
-
 		cout << "Database:" << '\t' << idb_database << endl;
 
 		IDBFile idb(std::make_shared<std::ifstream>(idb_database, ios::binary));
@@ -300,7 +262,7 @@ int check_idb_user(path idb_database, path signature_file = "")
 				? user1.size() : sizeof(signature_t));
 
 			cout << endl << "User1:" << endl;
-			print_license(license);
+			print_license(license, true);
 
 			if (!signature_file.empty())
 			{
@@ -323,20 +285,115 @@ int check_idb_user(path idb_database, path signature_file = "")
 	return 0;
 }
 
-#if defined(WIN32) && defined(UNICODE)
-path get_file_path(const string& filepath)
+// Check binary signature
+int check_signature(path bin_file, path decrypted_file = "")
 {
-	wstring unicode;
-	int count = MultiByteToWideChar(CP_UTF8, 0, filepath.c_str(), filepath.length(), nullptr, 0);
-	if (count)
+	license_t license;
+	signature_t signature;
+	memset(&signature, 0, sizeof(signature_t));
+
+	ifstream file(bin_file, ios::binary);
+	if (!file.is_open())
 	{
-		unicode.resize(count + 1);
-		count = MultiByteToWideChar(CP_UTF8, 0, filepath.c_str(), filepath.length(), unicode.data(), count);
-		if (count) unicode.resize(count);
+		cout << "Access error to file: " << bin_file << endl;
+		return 2;
 	}
-	return path(unicode);
+
+	file.seekg(0, ios::end);
+	streampos size = file.tellg();
+	file.seekg(0, ios::beg);
+
+	if (size)
+	{
+		file.read(reinterpret_cast<char*>(&signature),
+			size < sizeof(signature_t) ? size : sizeof(signature_t));
+	}
+	file.close();
+
+	bool is_sign_decrypted = false;
+	bool is_pirated = true;
+
+	is_sign_decrypted = decrypt_sign(signature, license, is_pirated);
+
+	cout << endl << "Signature block: " << bin_file << endl;
+
+	if (!is_sign_decrypted)
+	{
+		cout << "Incorrect block or unknown key" << endl;
+		return 2;
+	}
+
+	cout << "Is Pirated:" << '\t' << is_pirated << endl;
+	print_license(license);
+
+	if (!decrypted_file.empty())
+	{
+		cout << endl << "Save decrypted signature to: " << decrypted_file << endl;
+		if (!write_file(decrypted_file, reinterpret_cast<uint8_t*>(&license), sizeof(license_t)))
+			cout << "Error: access fail" << endl;
+		else
+			cout << "Decrypted signature saved" << endl;
+	}
+	return 0;
 }
-#endif
+
+int check_file_type(path filepath)
+{
+	const auto magic_size = 19;
+
+	ifstream file(filepath, ios::binary);
+	if (!file.is_open()) return false;
+
+	file.seekg(0, ios::end);
+	size_t size = file.tellg();
+	file.seekg(0, ios::beg);
+
+	if (size > magic_size)
+	{
+		string magic;
+		magic.resize(magic_size);
+
+		file.read(magic.data(), magic_size);
+
+		if (magic.find("HEXRAYS_LICENSE") == 0)
+			return EFileType_KEY;
+
+		if (magic.find("IDA0") == 0 ||
+			magic.find("IDA1") == 0 || 
+			magic.find("IDA2") == 0)
+			return EFileType_IDB;
+
+		if (size == 128 || size == 160)
+			return EFileType_BIN;
+	}
+	return EFileType_Unknown;
+}
+
+int ckeck_key(path in_file, path out_file = "")
+{
+	if (!exists(in_file))
+	{
+		cout << "File not found: " << in_file << endl;
+		return 2;
+	}
+	int result = 1;
+
+	switch (check_file_type(in_file))
+	{
+	case EFileType_KEY:
+		result = check_key_file(in_file, out_file);
+		break;
+	case EFileType_IDB:
+		result = check_idb_user(in_file, out_file);
+		break;
+	case EFileType_BIN:
+		result = check_signature(in_file, out_file);
+		break;
+	default:
+		cout << "Unknown file type: " << in_file << endl;
+	}
+	return result;
+}
 
 #ifdef UNICODE
 int _tmain(int argc, TCHAR* argv[])
@@ -375,29 +432,8 @@ int main(int argc, char* argv[])
 	path input(file_path(file_input));
 	path output;
 
-	if (result.count("output"))
-		output = file_path(result["output"].as<std::string>());
+	if (result.count("output")) output = file_path(result["output"].as<std::string>());
 
-
-
-	if (!file_type.compare("key"))
-	{
-		return check_key_file(input, output);
-	}
-	else if (!file_type.compare("bin"))
-	{
-		// only signature data
-		return check_signature(input, output);
-	}
-	else if (!file_type.compare("idb"))
-	{
-		// ida database
-		return check_idb_user(input, output);
-	}
-	else
-	{
-		cout << "Unknown file type: " << file_type << endl;
-		return 1;
-	}
+	return ckeck_key(input, output);
 }
 

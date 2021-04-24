@@ -1,5 +1,7 @@
 /*
 * IDA Pro signature decryptor and printer
+* 
+* RnD, 2021
 */
 
 #include "ida_license.hpp"

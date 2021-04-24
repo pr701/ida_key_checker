@@ -1,12 +1,14 @@
 /*
-* some conversion utils
+* Some conversion utils
+* 
+* RnD, 2021
 */
 
 #include "ida_cnv_utils.hpp"
 
 namespace ida
 {
-	void print_license(const license_t& license)
+	void print_license(const license_t& license, bool skip_ver)
 	{
 		if (license.zero)
 		{
@@ -14,9 +16,11 @@ namespace ida
 			return;
 		}
 
-		cout << "Key Number:" << '\t' << license.keyNumber << endl
-			<< "Key Version:" << '\t' << license.keyVer << endl
-			<< "License Type:" << '\t' << get_license_type(license.typeLic) << endl
+		if (!skip_ver)
+			cout << "Key Number:" << '\t' << license.keyNumber << endl
+				<< "Key Version:" << '\t' << license.keyVer << endl;
+
+		cout << "License Type:" << '\t' << get_license_type(license.typeLic) << endl
 			<< "User Number:" << '\t' << license.userNumber << endl
 			<< "Reserved0:" << '\t' << license.reserved0 << endl
 			<< "Reserved1:" << '\t' << license.reserved1 << endl

@@ -1,5 +1,7 @@
 /*
 * IDA Pro key parser
+* 
+* RnD, 2021
 */
 
 #include "ida_key.hpp"
@@ -143,13 +145,13 @@ namespace ida
 		}
 	}
 
-	bool parse_key(path file, key_t& key)
+	bool parse_key(path filepath, key_t& key)
 	{
 		key = key_t();
+		bool result = false;
 
-		ifstream kfile(file, ios::binary);
-		if (!kfile.is_open())
-			return false;
+		ifstream file(filepath, ios::binary);
+		if (!file.is_open()) return false;
 
 		bool isKey = false;
 		bool isEnded = false;
@@ -164,7 +166,7 @@ namespace ida
 		MD5_CTX md5_ctx;
 		MD5_Init(&md5_ctx);
 
-		while (getline(kfile, line))
+		while (getline(file, line))
 		{
 			len = line.length();
 
@@ -250,9 +252,9 @@ namespace ida
 
 			return true;
 		}
-		kfile.close();
+		file.close();
 
-		return false;
+		return result;
 	}
 
 	void print_key(const key_t& key)

@@ -14,9 +14,8 @@ ida_key_checker --help
 | Option        | Default   | Description                                 |
 | ------------- | --------- | ------------------------------------------- |
 | `-i/--help`   |           | A list of available command options         |
-| `-i/--input`  | `ida.key` | Input file                                  |
+| `-i/--input`  | `ida.key` | Input file (`key`, `bin` or `idb`)          |
 | `-o/--output` | `unused`  | Output (encrypted signature block) filename |
-| `-t/--type`   | `key`     | Type of file (`key`, `bin` or `idb`)        |
 
 ### Sample
 
@@ -70,10 +69,55 @@ Save decrypted signature to: "sign.decrypted"
 Decrypted signature saved
 ```
 
-Save signature from `.idb`
+Check signature from `.idb`
 
 ```bash
-ida_key_checker -i "advapi32.dll.idb" -t idb -o originaluser
+ida_key_checker -i GAME.idb
+
+Database:       "GAME.idb"
+Loader:         pe.dll - Portable executable for 80386 (PE)
+CPU:            metapc
+IDA Version:    700[7.00]
+Time:           2021-03-10 22:49:45
+CRC:            db68fa31
+Binary MD5:     37 5F 8D 73 1F 74 AC A9 4B 28 4B 17 46 41 DF D2
+
+Original User:
+Pirated Key:    0
+Key Number:     6279
+Key Version:    700
+License Type:   Named
+User Number:    0
+Reserved0:      -1
+Reserved1:      -1
+Started:        2017-09-21 10:18:24
+Expires:        Never
+Support Exp:    Never
+License ID:     48-3FBD-7F04-2C
+Username:       Jiang Ying, Personal license
+Version Flag:   0x0f
+MD5:            D5 6B 3D 90 90 36 99 51 1D 71 D9 64 1C 2B 21 C9
+
+User1:
+License Type:   Named
+User Number:    1
+Reserved0:      ffffffff
+Reserved1:      ffffffff
+Started:        2017-09-21 10:18:24
+Expires:        Never
+Support Exp:    2018-09-21 02:00:00
+License ID:     48-3FBD-7F04-2C
+Username:       Jiang Ying, Personal license
+Version Flag:   0x0f
+MD5:            D5 6B 3D 90 90 36 99 51 1D 71 D9 64 1C 2B 21 C9
+```
+
+## About databases
+
+To disable storage of private license details in database use this setting in config (`cfg/ida.cfg`)
+
+```
+STORE_USER_INFO = NO
 ```
 
 ## Libs
@@ -84,4 +128,4 @@ ida_key_checker -i "advapi32.dll.idb" -t idb -o originaluser
 
 [cpp-base64](https://github.com/ReneNyffenegger/cpp-base64)
 
-[idb3](https://github.com/nlitsme/idbutil)
+[idb3](https://github.com/nlitsme/idbutil) (updated fork [idb3](https://github.com/pr701/idb3))

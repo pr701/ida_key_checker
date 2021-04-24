@@ -1,5 +1,7 @@
 /*
 * Known rsa mod patches
+* 
+* RnD, 2021
 */
 
 #ifdef _MSC_VER

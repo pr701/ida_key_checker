@@ -1,5 +1,7 @@
 /*
-* IDA Pro key parser
+* IDA Pro key parser header
+*
+* RnD, 2021
 */
 
 #ifdef _MSC_VER
@@ -105,7 +107,7 @@ namespace ida
 	} key_t;
 
 	// parse ida.key
-	bool parse_key(path file, key_t& key);
+	bool parse_key(path filepath, key_t& key);
 	void print_key(const key_t& key);
 
 	// utils
