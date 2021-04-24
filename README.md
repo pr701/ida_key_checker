@@ -3,7 +3,7 @@ IDA Pro (6.x-7.x) key checker tool
 
 ## Usage
 
-A list of available utilities can be retrieved using:
+A list of available options can be retrieved using:
 
 ```shell
 ida_key_checker --help

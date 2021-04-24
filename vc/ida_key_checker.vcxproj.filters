@@ -77,8 +77,5 @@
     <ClInclude Include="..\src\ida_rsa_patches.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\idb3.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

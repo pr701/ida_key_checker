@@ -24,8 +24,8 @@
 
 #include "ida_key.hpp"
 #include "ida_rsa_patches.h"
-#include "idb3.h"
 
+#include <idb3.hpp>
 #include <cxxopts.hpp>
 
 using namespace ida;
@@ -235,19 +235,39 @@ int check_idb_user(path idb_database, path signature_file = "")
 		license_t license;
 		signature_t signature;
 
-		bool is_pirated;
-		bool is_decrypted;
+		bool is_pirated = true;
+		bool is_decrypted = false;
+		bool is_evaluation = false;
 
-		if (!originaluser.empty())
+		if (originaluser.empty())
+		{
+			cout << endl << "OriginalUser block not present" << endl;
+		}
+		else
 		{
 			memset(signature, 0, sizeof(signature_t));
 			memcpy(signature, originaluser.data(), originaluser.size() < sizeof(signature_t)
 				? originaluser.size() : sizeof(signature_t));
 			
-			is_decrypted = decrypt_sign(signature, license, is_pirated);
+			if (signature[0] == 0)
+			{
+				// check evaluation version
+				license_t* license = reinterpret_cast<license_t*>(&signature[0] - 1);
+				if (!memcmp(license->username, "Evaluation version", 18))
+				{
+					is_pirated = false;
+					is_evaluation = true;
+				}
+			}
+			else
+			{
+				is_decrypted = decrypt_sign(signature, license, is_pirated);
+			}
+
 			cout << endl << "Original User:" << endl
 				<< "Pirated Key:" << '\t' << is_pirated << endl;
-			
+			if (is_evaluation) cout << "Evaluation Key:" << '\t' << is_evaluation << endl;
+
 			if (is_decrypted) print_license(license);
 
 			if (!signature_file.empty())
@@ -332,8 +352,7 @@ int main(int argc, char* argv[])
 
 	options.add_options()
 		("i,input", "input file", cxxopts::value<std::string>(file_input)->default_value("ida.key"))
-		("o,output", "output encrypted signature block filename", cxxopts::value<std::string>(file_output))
-		("t,type", "type of file (key, bin or idb)", cxxopts::value<std::string>(file_type)->default_value("key"))
+		("o,output", "output filename (optional)", cxxopts::value<std::string>(file_output))
 		("help", "print help");
 
 	cxxopts::ParseResult result;
@@ -358,6 +377,8 @@ int main(int argc, char* argv[])
 
 	if (result.count("output"))
 		output = file_path(result["output"].as<std::string>());
+
+
 
 	if (!file_type.compare("key"))
 	{
