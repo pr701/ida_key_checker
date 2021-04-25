@@ -29,7 +29,9 @@ namespace ida
 	{
 		assert(sizeof(license_t) == sizeof(signature_t));
 
-		if (sign[0] == 0 || sign[1] == 0) return false;
+		for (uint8_t i = 0; i < sizeof(license_t); ++i)
+			if (sign[i] == 0)
+				return false;
 
 		BI_CTX* BI;
 		bigint* pub, * mod, * msg, * emsg;
