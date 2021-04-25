@@ -179,6 +179,10 @@
     <ClInclude Include="..\src\ida_rsa_patches.h" />
     <ClInclude Include="..\src\md5.h" />
     <ClInclude Include="..\src\md5.hpp" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
