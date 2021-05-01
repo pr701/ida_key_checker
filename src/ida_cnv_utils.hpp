@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 #include "ida_license.hpp"
 #include "ida_key.hpp"
@@ -35,7 +36,7 @@ namespace ida
 	string get_hex(const T& value)
 	{
 		std::stringstream str;
-		str << std::hex << setfill('0') << std::setw(sizeof(T) * 2);
+		str << std::hex << std::setfill('0') << std::setw(sizeof(T) * 2);
 		if (sizeof(T) == 1)
 			str << static_cast<uint16_t>(value);
 		else
