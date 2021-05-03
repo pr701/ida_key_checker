@@ -95,7 +95,7 @@ namespace ida
 		time_t issued;
 		vector<product_t> products;
 		md5_t md5;
-		rnd_t rnd; // seller data?
+		rnd_t rnd; // random?
 		signature_t signature;
 
 		key_t() : version(0)
@@ -108,7 +108,9 @@ namespace ida
 
 	// parse ida.key
 	bool parse_key(path filepath, key_t& key);
+
 	void print_key(const key_t& key);
+	string print_key_view(const key_t& key, bool print_sign = false);
 
 	// utils
 	string get_product_string(const product_code_t& product, bool description = false);

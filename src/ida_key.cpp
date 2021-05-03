@@ -287,4 +287,41 @@ namespace ida
 			}
 		}
 	}
+
+	string print_key_view(const key_t& key, bool print_sign)
+	{
+		// build license
+		int major = key.version / 100;
+		int minor = (key.version - major * 100) / 10;
+
+		stringstream str;
+		str << "HEXRAYS_LICENSE " << major << "." << minor << '\n' << '\n'
+			<< "USER            " << key.username << '\n'
+			<< "EMAIL           " << key.email << '\n'
+			<< "ISSUED_ON       " << get_time(key.issued, true) << '\n' << '\n'
+			<< "  LICENSE_ID    PRODUCT     #  SUPPORT    EXPIRES        DESCRIPTION" << '\n'
+			<< "--------------- ---------- -- ---------- ---------  -----------------------------" << '\n';
+		for (const auto& product : key.products)
+		{
+			str << setfill(' ') << left
+				<< get_license_id(product.licenseId) << " "
+				<< setw(10) << get_product_string(product.product, false) << setw(1) << " "
+				<< setw(2) << right << to_string(product.count) << left << setw(1) << " "
+				<< setw(10) << get_time(product.support) << setw(1) << " "
+				<< setw(10) << get_time(product.expires) << setw(1) << " "
+				<< get_product_string(product.product, true) << '\n';
+		}
+		str << '\n' << "R:" << base64_encode(string(reinterpret_cast<const char*>(key.rnd), sizeof(rnd_t))) << '\n';
+		
+		if (print_sign)
+		{
+			string sign(reinterpret_cast<const char*>(key.signature), sizeof(signature_t));
+			sign.resize(160); sign = "S:" + base64_encode(sign);
+			sign.insert(78, "\r\nS:");
+			sign.insert(157, "\r\nS:");
+			str << sign << '\r\n';
+		}
+
+		return str.str();
+	}
 }

@@ -24,6 +24,7 @@
 
 namespace ida
 {
+	// https://www.hex-rays.com/licenses/
 	enum ELicense
 	{
 		ELicense_Fixed = 0,
