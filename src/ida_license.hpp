@@ -52,8 +52,8 @@ namespace ida
 		id_t licenseId;
 		char username[IDA_LIC_USERNAME_SIZE];
 		uint8_t reserved2[5];
-		uint8_t versionFlag;
-		uint8_t reserved3[7];
+		uint16_t versionFlag;
+		uint8_t reserved3[6];
 		md5_t md5;
 		// uint8_t pad[32]; // 0x0
 	} license_t;
