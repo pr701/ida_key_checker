@@ -275,7 +275,7 @@ namespace ida
 				<< setw(3) << "#" << setw(1) << ' '
 				<< setw(10) << "SUPPORT" << setw(1) << ' '
 				<< setw(10) << "EXPIRES" << setw(1) << ' '
-				<< setw(1) << "NAME" << endl;
+				<< setw(6) << "NAME" << endl;
 
 			for (const auto& product : key.products)
 			{

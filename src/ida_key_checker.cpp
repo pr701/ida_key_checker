@@ -369,7 +369,7 @@ int check_file_type(path filepath)
 	return EFileType_Unknown;
 }
 
-int ckeck_key(path in_file, path out_file = "")
+int check_key(path in_file, path out_file = "")
 {
 	if (!exists(in_file))
 	{
@@ -434,6 +434,6 @@ int main(int argc, char* argv[])
 
 	if (result.count("output")) output = file_path(result["output"].as<std::string>());
 
-	return ckeck_key(input, output);
+	return check_key(input, output);
 }
 
