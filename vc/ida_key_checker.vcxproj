@@ -176,6 +176,7 @@
     <ClInclude Include="..\src\ida_key.hpp" />
     <ClInclude Include="..\src\ida_license.hpp" />
     <ClInclude Include="..\src\ida_cnv_utils.hpp" />
+    <ClInclude Include="..\src\ida_rays_license.hpp" />
     <ClInclude Include="..\src\ida_rsa_patches.h" />
     <ClInclude Include="..\src\md5.h" />
     <ClInclude Include="..\src\md5.hpp" />

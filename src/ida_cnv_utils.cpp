@@ -28,9 +28,44 @@ namespace ida
 			<< "Expires:" << '\t' << get_time(license.expires, true) << endl
 			<< "Support Exp:" << '\t' << get_time(license.expSupp, true) << endl
 			<< "License ID:" << '\t' << get_license_id(license.licenseId) << endl
-			<< "Username:" << '\t' << get_username(license.username) << endl
+			<< "Username:" << '\t' << get_string(license.username, IDA_LIC_USERNAME_SIZE) << endl
 			<< "Version Flag:" << '\t' << "0x" << setfill('0') << setw(4) << hex << license.versionFlag << endl
 			<< "MD5:" << '\t' << '\t' << get_hex(license.md5, sizeof(md5_t)) << endl;
+	}
+
+	void print_rays_license(const rays_license_t& license)
+	{
+		typedef struct pair_t
+		{
+			uint8_t id;
+			string product;
+		} pair_t;
+
+		vector<pair_t> k_pair = {
+			{ 0x50, "MIPS" },
+			{ 0x51, "MIPS" },
+			{ 0x52, "PPC64" },
+			{ 0x53, "PPC" },
+			{ 0x54, "ARM64" },
+			{ 0x55, "x64" },
+			{ 0x56, "ARM" },
+			{ 0x57, "x86" },
+		};
+
+		cout << "IDA ID:" << '\t' << '\t' << get_license_id(license.ida_id) << endl
+			<< "Plugin ID:" << '\t' << get_license_id(license.plugin_id);
+
+		for (const auto& p : k_pair)
+			if (p.id == license.plugin_id[0])
+			{
+				cout << '\t' << "(" << p.product << ")";
+				break;
+			}
+		cout << endl
+			<< "Username:" << '\t' << get_string(license.name, sizeof(license.name)) << endl
+			<< "Issued:" << '\t' << '\t' << get_time(license.creation, true) << endl
+			<< "Support:" << '\t' << get_time(license.support, true) << endl
+			<< "MD5:" << '\t' << '\t' << get_string(license.md5, sizeof(license.md5)) << endl;
 	}
 
 	string get_license_type(uint16_t type)
@@ -91,12 +126,13 @@ namespace ida
 		return buff;
 	}
 
-	string get_username(const char* username)
+	string get_string(const char* str, size_t limit)
 	{
-		if (!username) return "";
-		char user[IDA_LIC_USERNAME_SIZE + 1] = { 0 };
-		memcpy(user, username, IDA_LIC_USERNAME_SIZE);
-		return user;
+		if (!str) return "";
+
+		string buf; buf.resize(limit + 1);
+		memcpy(buf.data(), str, limit);
+		return string(buf.c_str());
 	}
 
 	string get_hex(const uint8_t* data, size_t size)

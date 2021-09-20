@@ -24,11 +24,12 @@ using namespace std;
 namespace ida
 {
 	void print_license(const license_t& license, bool skip_ver = false);
+	void print_rays_license(const rays_license_t& license);
 
 	string get_license_type(uint16_t type);
 	string get_license_id(const id_t& id);
 	string get_time(time_t time, bool extended = false);
-	string get_username(const char* username);
+	string get_string(const char* str, size_t limit);
 	string get_hex(const uint8_t* data, size_t size);
 	string get_hex(const string& value);
 

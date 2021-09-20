@@ -80,6 +80,9 @@
     <ClInclude Include="resource.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\ida_rays_license.hpp">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

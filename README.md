@@ -11,11 +11,11 @@ ida_key_checker --help
 
 ### Arguments:
 
-| Option        | Default   | Description                                 |
-| ------------- | --------- | ------------------------------------------- |
-| `-i/--help`   |           | A list of available command options         |
-| `-i/--input`  | `ida.key` | Input file (`key`, `bin` or `idb`)          |
-| `-o/--output` | `unused`  | Output (encrypted signature block) filename |
+| Option        | Default   | Description                                        |
+| ------------- | --------- | -------------------------------------------------- |
+| `-h/--help`   |           | A list of available command options                |
+| `-i/--input`  | `ida.key` | Input file (`key`, `bin`, `idb` or hexrays binary) |
+| `-o/--output` | `unused`  | Output (encrypted signature block) filename        |
 
 ### Sample
 
@@ -110,6 +110,19 @@ License ID:     48-3FBD-7F04-2C
 Username:       Jiang Ying, Personal license
 Version Flag:   0x0f
 MD5:            D5 6B 3D 90 90 36 99 51 1D 71 D9 64 1C 2B 21 C9
+```
+
+Get HexRays license from binary:
+```bash
+ida_key_checker.exe -i hexx64.dll
+HEXRAYS_VERSION 7.0.0.170914
+
+IDA ID:         48-3FBD-7F04-2C
+Plugin ID:      55-BAE5-8A04-93 (x64)
+Username:       Jiang Ying, Personal license
+Issued:         2017-09-21 10:18:34
+Support:        2018-09-21 02:00:00
+MD5:            af4c3c64e8ba7d137cc75e1574ecbf56
 ```
 
 ## About databases

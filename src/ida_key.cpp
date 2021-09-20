@@ -257,17 +257,20 @@ namespace ida
 		return result;
 	}
 
-	void print_key(const key_t& key)
+	void print_key(const key_t& key, bool print_header)
 	{
-		uint16_t major = (key.version / 100);
-		uint16_t minor = (key.version - major * 100) / 10;
+		if (print_header)
+		{
+			uint16_t major = (key.version / 100);
+			uint16_t minor = (key.version - major * 100) / 10;
 
-		cout << "HexRays License" << '\t' << major << "." << minor << endl << endl
-			<< "User" << '\t' << '\t' << key.username << endl
-			<< "Email" << '\t' << '\t' << key.email << endl
-			<< "Issued On" << '\t' << get_time(key.issued, true) << endl
-			<< "MD5" << '\t' << '\t' << get_hex(key.md5, sizeof(md5_t)) << endl;
-
+			cout << "HexRays License" << '\t' << major << "." << minor << endl << endl
+				<< "User" << '\t' << '\t' << key.username << endl
+				<< "Email" << '\t' << '\t' << key.email << endl
+				<< "Issued On" << '\t' << get_time(key.issued, true) << endl
+				<< "MD5" << '\t' << '\t' << get_hex(key.md5, sizeof(md5_t)) << endl;
+		}
+		
 		if (key.products.size())
 		{
 			cout << endl << "Products" << endl
@@ -323,5 +326,65 @@ namespace ida
 		}
 
 		return str.str();
+	}
+
+	ELicenseState get_hexrays_license(path filepath, string& version, rays_license_t& license)
+	{
+		ifstream file(filepath, ios::binary);
+		if (!file.is_open()) return ELicenseState_AccessError;
+
+		file.seekg(0, ios::end);
+		auto size = file.tellg();
+		file.seekg(0, ios::beg);
+		
+		// this is definitely not a plug-in module
+		if (size > 10000000) return ELicenseState_NotFound;
+
+		std::vector<uint8_t> bin;
+		bin.resize(size);
+		file.read(reinterpret_cast<char*>(bin.data()), bin.size());
+
+		// HEXRAYS_VERSION
+		vector<uint8_t> text(cbegin(ida_rays_version_text), cend(ida_rays_version_text));
+		vector<uint8_t> sign(cbegin(ida_rays_license_sign), cend(ida_rays_license_sign));
+		
+		// search
+		auto it = std::search(bin.begin(), bin.end(), boyer_moore_searcher(text.begin(), text.end()));
+		if (it == bin.end()) return ELicenseState_NotFound;
+
+		auto offset = it - bin.begin();
+
+		// the block cannot be at the end of the file
+		if (offset + sizeof(rays_signature_t) + sizeof(rays_license_t) > bin.size())
+			return ELicenseState_NotFound;
+
+		// default
+		version = "HEXRAYS_VERSION";
+		memset(&license, 0, sizeof(rays_license_t));
+
+		const char* ver = reinterpret_cast<char*>(bin.data() + offset);
+		// zero-end str guarantee
+		version = get_string(ver, sizeof(rays_signature_t));
+
+		// license payload
+		rays_license_t* lic = reinterpret_cast<rays_license_t*>(bin.data() + offset + sizeof(rays_signature_t));
+		if (lic->flag1 != 0x01fe0000 && lic->flag2 != 0x00010000)
+		{
+			// for posix bin's
+			it = std::search(bin.begin() + offset - 400, bin.end(), boyer_moore_searcher(sign.begin(), sign.end()));
+			if (it == bin.end()) return ELicenseState_Corrupted;
+			lic = reinterpret_cast<rays_license_t*>(bin.data() + (it - bin.begin()));
+		}
+		// copy
+		memcpy(&license, lic, sizeof(rays_license_t));
+
+		// post check
+		if (ver[31] != 0 ||
+			lic->creation == 0 || lic->support == 0 ||
+			lic->name[0] == 0 || lic->md5[0] == 0 ||
+			lic->plugin_id[0] == 0 ||  lic->ida_id[0] == 0)
+			return ELicenseState_Corrupted;
+
+		return ELicenseState_Ok;
 	}
 }

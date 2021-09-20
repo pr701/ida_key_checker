@@ -38,6 +38,9 @@ enum EFileType
 	EFileType_Unknown = -1,
 	EFileType_KEY = 0,
 	EFileType_IDB,
+	EFileType_PE,
+	EFileType_ELF,
+	EFileType_DYLIB,
 	EFileType_BIN
 };
 
@@ -337,6 +340,34 @@ int check_signature(path bin_file, path decrypted_file = "")
 	return 0;
 }
 
+int check_hexrays_plugin(path bin_file, path bin_license = "")
+{
+	string version;
+	rays_license_t license;
+	auto result = get_hexrays_license(bin_file, version, license);
+
+	if (result != ELicenseState_Ok && result != ELicenseState_Corrupted)
+	{
+		switch (result)
+		{
+		case ida::ELicenseState_AccessError:
+			cout << "Access error to file: " << bin_file << endl;
+			break;
+		case ida::ELicenseState_NotFound:
+			cout << "License block not found." << endl;
+			break;
+		default:
+			break;
+		}
+		return 2;
+	}
+	version.insert(version.begin() + 15, ' ');
+	cout << version << (result == ELicenseState_Corrupted ? "\t(Corrupted)" : "") << endl << endl;
+	print_rays_license(license);
+
+	return 0;
+}
+
 int check_file_type(path filepath)
 {
 	const auto magic_size = 19;
@@ -363,6 +394,15 @@ int check_file_type(path filepath)
 			magic.find("IDA2") == 0)
 			return EFileType_IDB;
 
+		if (magic.find("MZ") == 0)
+			return EFileType_PE;
+
+		if (magic.find("ELF") == 1)
+			return EFileType_ELF;
+
+		if (magic.find("\xCF\xFA\xED\xFE") == 0)
+			return EFileType_DYLIB;
+
 		if (size == 128 || size == 160)
 			return EFileType_BIN;
 	}
@@ -388,6 +428,11 @@ int check_key(path in_file, path out_file = "")
 		break;
 	case EFileType_BIN:
 		result = check_signature(in_file, out_file);
+		break;
+	case EFileType_PE:
+	case EFileType_ELF:
+	case EFileType_DYLIB:
+		result = check_hexrays_plugin(in_file, out_file);
 		break;
 	default:
 		cout << "Unknown file type: " << in_file << endl;

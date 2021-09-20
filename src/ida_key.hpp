@@ -19,8 +19,10 @@
 #include <iomanip> 
 #include <fstream>
 #include <filesystem>
+#include <functional>
 
 #include "ida_license.hpp"
+#include "ida_rays_license.hpp"
 #include "ida_cnv_utils.hpp"
 
 #undef max
@@ -59,6 +61,14 @@ namespace ida
 		EPlatform_Windows,
 		EPlatform_Mac,
 		EPlatform_Linux,
+	};
+
+	enum ELicenseState
+	{
+		ELicenseState_Ok = 0,
+		ELicenseState_Corrupted,
+		ELicenseState_AccessError,
+		ELicenseState_NotFound,
 	};
 
 	typedef uint8_t rnd_t[57];
@@ -109,12 +119,15 @@ namespace ida
 	// parse ida.key
 	bool parse_key(path filepath, key_t& key);
 
-	void print_key(const key_t& key);
+	void print_key(const key_t& key, bool print_header = true);
 	string print_key_view(const key_t& key, bool print_sign = false);
 
 	// utils
 	string get_product_string(const product_code_t& product, bool description = false);
 	product_code_t get_product_from_code(string code);
+
+	// hexrays license
+	ELicenseState get_hexrays_license(path filepath, string& version, rays_license_t& license);
 }
 
 #endif // _IDA_KEY_HPP_
