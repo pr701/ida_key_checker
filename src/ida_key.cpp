@@ -321,8 +321,8 @@ namespace ida
 			string sign(reinterpret_cast<const char*>(key.signature), sizeof(signature_t));
 			sign.resize(160); sign = "S:" + base64_encode(sign);
 			sign.insert(78, "\r\nS:");
-			sign.insert(157, "\r\nS:");
-			str << sign << '\r\n';
+			sign.insert(158, "\r\nS:");
+			str << sign << "\r\n";
 		}
 
 		return str.str();
