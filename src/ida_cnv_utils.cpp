@@ -29,7 +29,7 @@ namespace ida
 			<< "Support Exp:" << '\t' << get_time(license.expSupp, true) << endl
 			<< "License ID:" << '\t' << get_license_id(license.licenseId) << endl
 			<< "Username:" << '\t' << get_string(license.username, IDA_LIC_USERNAME_SIZE) << endl
-			<< "Version Flag:" << '\t' << "0x" << setfill('0') << setw(4) << hex << license.versionFlag << endl
+			<< "Version Flag:" << '\t' << "0x" << setfill('0') << setw(8) << hex << license.versionFlag << endl
 			<< "MD5:" << '\t' << '\t' << get_hex(license.md5, sizeof(md5_t)) << endl;
 	}
 
