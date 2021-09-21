@@ -11,11 +11,11 @@ ida_key_checker --help
 
 ### Arguments:
 
-| Option        | Default   | Description                                        |
-| ------------- | --------- | -------------------------------------------------- |
-| `-h/--help`   |           | A list of available command options                |
-| `-i/--input`  | `ida.key` | Input file (`key`, `bin`, `idb` or hexrays binary) |
-| `-o/--output` | `unused`  | Output (encrypted signature block) filename        |
+| Option        | Default   | Description                                            |
+| ------------- | --------- | ------------------------------------------------------ |
+| `-h/--help`   |           | A list of available command options                    |
+| `-i/--input`  | `ida.key` | Input file (`key`, `bin`, `idb` or hexrays binary)     |
+| `-o/--output` | `unused`  | Output (encrypted signature or license block) filename |
 
 ### Sample
 

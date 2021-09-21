@@ -343,6 +343,7 @@ int check_signature(path bin_file, path decrypted_file = "")
 int check_hexrays_plugin(path bin_file, path bin_license = "")
 {
 	string version;
+	string ver;
 	rays_license_t license;
 	auto result = get_hexrays_license(bin_file, version, license);
 
@@ -361,10 +362,26 @@ int check_hexrays_plugin(path bin_file, path bin_license = "")
 		}
 		return 2;
 	}
+	ver = version;
 	version.insert(version.begin() + 15, ' ');
 	cout << version << (result == ELicenseState_Corrupted ? "\t(Corrupted)" : "") << endl << endl;
 	print_rays_license(license);
 
+	if (!bin_license.empty())
+	{
+		ver.resize(sizeof(rays_signature_t));
+		vector<uint8_t> block;
+		block.insert(block.begin(), ver.cbegin(), ver.cend());
+		block.insert(block.end(),
+			reinterpret_cast<uint8_t*>(&license),
+			reinterpret_cast<uint8_t*>(&license) + sizeof(rays_license_t));
+
+		cout << endl << "Save HexRays license block to: " << bin_license << endl;
+		if (!write_file(bin_license, block.data(), block.size()))
+			cout << "Error: access fail" << endl;
+		else
+			cout << "License block saved" << endl;
+	}
 	return 0;
 }
 
