@@ -30,7 +30,7 @@ namespace ida
 	string get_license_id(const id_t& id);
 	string get_time(time_t time, bool extended = false);
 	string get_string(const char* str, size_t limit);
-	string get_hex(const uint8_t* data, size_t size);
+	string get_hex(const void* data, size_t size);
 	string get_hex(const string& value);
 
 	template<typename T>

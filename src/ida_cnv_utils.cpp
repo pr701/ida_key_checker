@@ -17,20 +17,29 @@ namespace ida
 		}
 
 		if (!skip_ver)
-			cout << "Key Number:" << '\t' << license.keyNumber << endl
-				<< "Key Version:" << '\t' << license.keyVer << endl;
+			cout << "Key Number:" << endl << '\t' << license.keyNumber << endl
+			<< '\t' << get_hex(&license.keyNumber, sizeof(license.keyNumber)) << endl
+			<< "Key Version:" << endl << '\t' << license.keyVer << endl
+			<< '\t' << get_hex(&license.keyVer, sizeof(license.keyVer)) << endl;
 
-		cout << "License Type:" << '\t' << get_license_type(license.typeLic) << endl
-			<< "User Number:" << '\t' << license.userNumber << endl
-			<< "Reserved0:" << '\t' << license.reserved0 << endl
-			<< "Reserved1:" << '\t' << license.reserved1 << endl
-			<< "Started:" << '\t' << get_time(license.started, true) << endl
-			<< "Expires:" << '\t' << get_time(license.expires, true) << endl
-			<< "Support Exp:" << '\t' << get_time(license.expSupp, true) << endl
-			<< "License ID:" << '\t' << get_license_id(license.licenseId) << endl
-			<< "Username:" << '\t' << get_string(license.username, IDA_LIC_USERNAME_SIZE) << endl
-			<< "Version Flag:" << '\t' << "0x" << setfill('0') << setw(8) << hex << license.versionFlag << endl
-			<< "MD5:" << '\t' << '\t' << get_hex(license.md5, sizeof(md5_t)) << endl;
+		cout << "License Type:" << endl << '\t' << get_license_type(license.typeLic) << endl
+			<< '\t' << get_hex(&license.typeLic, sizeof(license.typeLic)) << endl
+			<< "User Number:" << endl << '\t' << license.userNumber << endl
+			<< '\t' << get_hex(&license.userNumber, sizeof(license.userNumber)) << endl
+			<< "Reserved0:" << endl << '\t' << license.reserved0 << endl
+			<< '\t' << get_hex(&license.reserved0, sizeof(license.reserved0)) << endl
+			<< "Reserved1:" << endl << '\t' << license.reserved1 << endl
+			<< '\t' << get_hex(&license.reserved1, sizeof(license.reserved1)) << endl
+			<< "Started:" << endl << '\t' << get_time(license.started, true) << endl
+			<< '\t' << get_hex(&license.started, sizeof(license.started)) << endl
+			<< "Expires:" << endl << '\t' << get_time(license.expires, true) << endl
+			<< '\t' << get_hex(&license.expires, sizeof(license.expires)) << endl
+			<< "Support Exp:" << endl << '\t' << get_time(license.expSupp, true) << endl
+			<< '\t' << get_hex(&license.expSupp, sizeof(license.expSupp)) << endl
+			<< "License ID:" << endl << '\t' << get_license_id(license.licenseId) << endl
+			<< "Username:" << endl << '\t' << get_string(license.username, IDA_LIC_USERNAME_SIZE) << endl
+			<< "Version Flag:" << endl << '\t' << "0x" << setfill('0') << setw(8) << hex << license.versionFlag << endl
+			<< "MD5:" << endl << '\t' << get_hex(license.md5, sizeof(md5_t)) << endl;
 	}
 
 	void print_rays_license(const rays_license_t& license)
@@ -52,8 +61,8 @@ namespace ida
 			{ 0x57, "x86" },
 		};
 
-		cout << "IDA ID:" << '\t' << '\t' << get_license_id(license.ida_id) << endl
-			<< "Plugin ID:" << '\t' << get_license_id(license.plugin_id);
+		cout << "IDA ID:" << endl << '\t' << get_license_id(license.ida_id) << endl
+			<< "Plugin ID:" << endl << '\t' << get_license_id(license.plugin_id);
 
 		for (const auto& p : k_pair)
 			if (p.id == license.plugin_id[0])
@@ -62,10 +71,10 @@ namespace ida
 				break;
 			}
 		cout << endl
-			<< "Username:" << '\t' << get_string(license.name, sizeof(license.name)) << endl
-			<< "Issued:" << '\t' << '\t' << get_time(license.creation, true) << endl
-			<< "Support:" << '\t' << get_time(license.support, true) << endl
-			<< "MD5:" << '\t' << '\t' << get_string(license.md5, sizeof(license.md5)) << endl;
+			<< "Username:" << endl << '\t' << get_string(license.name, sizeof(license.name)) << endl
+			<< "Issued:" << endl << '\t' << get_time(license.creation, true) << endl
+			<< "Support:" << endl << '\t' << get_time(license.support, true) << endl
+			<< "MD5:" << endl << '\t' << get_string(license.md5, sizeof(license.md5)) << endl;
 	}
 
 	string get_license_type(uint16_t type)
@@ -135,7 +144,7 @@ namespace ida
 		return string(buf.c_str());
 	}
 
-	string get_hex(const uint8_t* data, size_t size)
+	string get_hex(const void* data, size_t size)
 	{
 		if (!data || !size) return "null";
 		
@@ -143,7 +152,7 @@ namespace ida
 		for (size_t i = 0; i < size; ++i)
 		{
 			char val[8] = { 0 };
-			sprintf_s(val, 8, "%02X", data[i]);
+			sprintf_s(val, 8, "%02X", reinterpret_cast<const uint8_t*>(data)[i]);
 			result.append(val);
 			if (i != size - 1) result.append(" ");
 		}

@@ -196,6 +196,7 @@ int check_idb_user(path idb_database, path signature_file = "")
 
 		string originaluser = id0.getdata(id0.node("$ original user"), 'S', 0);
 		string user1 = id0.getdata(id0.node("$ user1"), 'S', 0);
+		string evaluser;
 
 		license_t license;
 		signature_t signature;
@@ -206,7 +207,7 @@ int check_idb_user(path idb_database, path signature_file = "")
 
 		if (originaluser.empty())
 		{
-			cout << endl << "OriginalUser block not present" << endl;
+			cout << endl << "OriginalUser block doesn't present" << endl;
 		}
 		else
 		{
@@ -218,7 +219,10 @@ int check_idb_user(path idb_database, path signature_file = "")
 			{
 				// check evaluation version
 				license_t* license = reinterpret_cast<license_t*>(&signature[0] - 1);
-				if (!memcmp(license->username, "Evaluation version", 18))
+				evaluser = get_string(license->username, IDA_LIC_USERNAME_SIZE);
+				
+				if (!evaluser.compare("Evaluation version") ||
+					!evaluser.compare("Freeware version"))
 				{
 					is_pirated = false;
 					is_evaluation = true;
@@ -231,9 +235,18 @@ int check_idb_user(path idb_database, path signature_file = "")
 
 			cout << endl << "Original User:" << endl
 				<< "Pirated Key:" << '\t' << is_pirated << endl;
-			if (is_evaluation) cout << "Evaluation Key:" << '\t' << is_evaluation << endl;
-
-			if (is_decrypted) print_license(license);
+			if (is_evaluation)
+			{
+				cout << "Evaluation Key:" << '\t' << is_evaluation << endl
+					<< "User: " << '\t' << evaluser << endl;
+			}
+			else
+			{
+				if (is_decrypted)
+					print_license(license);
+				else
+					cout << "Error: Unknown decryption key." << endl;
+			}
 
 			if (!signature_file.empty())
 			{

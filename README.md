@@ -48,19 +48,41 @@ Products
  57-B813-7E44-DB   1 2016-04-08      Never x86 Decompiler (Windows)
 
 Signature:
-Key Number:     25143
-Key Version:    680
-License Type:   Named
-User Number:    0
-Reserved0:      -1
-Reserved1:      -1
-Started:        2015-05-25 19:07:13
-Expires:        Never
-Support Exp:    Never
-License ID:     48-3255-7514-28
-Username:       Giancarlo Russo, HT Srl
-Version Flag:   0x07
-MD5:            1A 7C 54 CF 96 02 83 23 F7 07 4C 05 5B B3 B5 05
+Key Number:
+        25143
+        37 62
+Key Version:
+        680
+        A8 02
+License Type:
+        Named
+        01 00
+User Number:
+        0
+        00 00
+Reserved0:
+        -1
+        FF FF FF FF
+Reserved1:
+        -1
+        FF FF FF FF
+Started:
+        2015-05-25 19:07:13
+        B1 48 63 55
+Expires:
+        Never
+        00 00 00 00
+Support Exp:
+        Never
+        00 00 00 00
+License ID:
+        48-3255-7514-28
+Username:
+        Giancarlo Russo, HT Srl
+Version Flag:
+        0x00000007
+MD5:
+        1A 7C 54 CF 96 02 83 23 F7 07 4C 05 5B B3 B5 05
 
 Save signature to: "sign.bin"
 Signature saved
@@ -84,32 +106,72 @@ Binary MD5:     37 5F 8D 73 1F 74 AC A9 4B 28 4B 17 46 41 DF D2
 
 Original User:
 Pirated Key:    0
-Key Number:     6279
-Key Version:    700
-License Type:   Named
-User Number:    0
-Reserved0:      -1
-Reserved1:      -1
-Started:        2017-09-21 10:18:24
-Expires:        Never
-Support Exp:    Never
-License ID:     48-3FBD-7F04-2C
-Username:       Jiang Ying, Personal license
-Version Flag:   0x0f
-MD5:            D5 6B 3D 90 90 36 99 51 1D 71 D9 64 1C 2B 21 C9
+Key Number:
+        6279
+        87 18
+Key Version:
+        700
+        BC 02
+License Type:
+        Named
+        01 00
+User Number:
+        0
+        00 00
+Reserved0:
+        -1
+        FF FF FF FF
+Reserved1:
+        -1
+        FF FF FF FF
+Started:
+        2017-09-21 10:18:24
+        C0 67 C3 59
+Expires:
+        Never
+        00 00 00 00
+Support Exp:
+        Never
+        00 00 00 00
+License ID:
+        48-3FBD-7F04-2C
+Username:
+        Jiang Ying, Personal license
+Version Flag:
+        0x0000000f
+MD5:
+        D5 6B 3D 90 90 36 99 51 1D 71 D9 64 1C 2B 21 C9
 
 User1:
-License Type:   Named
-User Number:    1
-Reserved0:      ffffffff
-Reserved1:      ffffffff
-Started:        2017-09-21 10:18:24
-Expires:        Never
-Support Exp:    2018-09-21 02:00:00
-License ID:     48-3FBD-7F04-2C
-Username:       Jiang Ying, Personal license
-Version Flag:   0x0f
-MD5:            D5 6B 3D 90 90 36 99 51 1D 71 D9 64 1C 2B 21 C9
+License Type:
+        Named
+        01 00
+User Number:
+        1
+        01 00
+Reserved0:
+        ffffffff
+        FF FF FF FF
+Reserved1:
+        ffffffff
+        FF FF FF FF
+Started:
+        2017-09-21 10:18:24
+        C0 67 C3 59
+Expires:
+        Never
+        00 00 00 00
+Support Exp:
+        2018-09-21 02:00:00
+        70 26 A4 5B
+License ID:
+        48-3FBD-7F04-2C
+Username:
+        Jiang Ying, Personal license
+Version Flag:
+        0x0000000f
+MD5:
+        D5 6B 3D 90 90 36 99 51 1D 71 D9 64 1C 2B 21 C9
 ```
 
 Get HexRays license from binary:
@@ -117,12 +179,18 @@ Get HexRays license from binary:
 ida_key_checker.exe -i hexx64.dll
 HEXRAYS_VERSION 7.0.0.170914
 
-IDA ID:         48-3FBD-7F04-2C
-Plugin ID:      55-BAE5-8A04-93 (x64)
-Username:       Jiang Ying, Personal license
-Issued:         2017-09-21 10:18:34
-Support:        2018-09-21 02:00:00
-MD5:            af4c3c64e8ba7d137cc75e1574ecbf56
+IDA ID:
+        48-3FBD-7F04-2C
+Plugin ID:
+        55-BAE5-8A04-93 (x64)
+Username:
+        Jiang Ying, Personal license
+Issued:
+        2017-09-21 10:18:34
+Support:
+        2018-09-21 02:00:00
+MD5:
+        af4c3c64e8ba7d137cc75e1574ecbf56
 ```
 
 ## About databases

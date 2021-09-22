@@ -405,3 +405,4 @@ FodyWeavers.xsd
 *.tlog
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,c++
+/vc/ida.key
